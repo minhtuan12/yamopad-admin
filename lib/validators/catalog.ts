@@ -1,4 +1,4 @@
-import type { CategoryPayload, LocalizedText, ProductPayload, ProductProperty } from "@/types/catalog";
+import type { CategoryPayload, LocalizedText, ProductPayload, ProductProperty } from "../../types/catalog";
 import { createSlugFromViTitle } from "../slug";
 
 type FieldErrors = Record<string, string>;

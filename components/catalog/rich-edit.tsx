@@ -1,7 +1,7 @@
 "use client";
 
 import { Collapse, Form } from "antd";
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { SimpleEditor } from "../../components/tiptap-templates/simple/simple-editor";
 
 export function RichEdit({
   value,

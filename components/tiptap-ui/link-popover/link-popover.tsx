@@ -4,35 +4,35 @@ import { forwardRef, useCallback, useEffect, useState } from "react"
 import type { Editor } from "@tiptap/react"
 
 // --- Hooks ---
-import { useIsBreakpoint } from "@/hooks/use-is-breakpoint"
-import { useTiptapEditor } from "@/hooks/use-tiptap-editor"
+import { useIsBreakpoint } from '../../../hooks/use-is-breakpoint'
+import { useTiptapEditor } from '../../../hooks/use-tiptap-editor'
 
 // --- Icons ---
-import { CornerDownLeftIcon } from "@/components/tiptap-icons/corner-down-left-icon"
-import { ExternalLinkIcon } from "@/components/tiptap-icons/external-link-icon"
-import { LinkIcon } from "@/components/tiptap-icons/link-icon"
-import { TrashIcon } from "@/components/tiptap-icons/trash-icon"
+import { CornerDownLeftIcon } from '../../tiptap-icons/corner-down-left-icon'
+import { ExternalLinkIcon } from '../../tiptap-icons/external-link-icon'
+import { LinkIcon } from '../../tiptap-icons/link-icon'
+import { TrashIcon } from '../../tiptap-icons/trash-icon'
 
 // --- Tiptap UI ---
-import type { UseLinkPopoverConfig } from "@/components/tiptap-ui/link-popover"
-import { useLinkPopover } from "@/components/tiptap-ui/link-popover"
+import type { UseLinkPopoverConfig } from './'
+import { useLinkPopover } from './'
 
 // --- UI Primitives ---
-import type { ButtonProps } from "@/components/tiptap-ui-primitive/button"
-import { Button } from "@/components/tiptap-ui-primitive/button"
+import type { ButtonProps } from '../../tiptap-ui-primitive/button'
+import { Button } from '../../tiptap-ui-primitive/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/tiptap-ui-primitive/popover"
-import { Separator } from "@/components/tiptap-ui-primitive/separator"
+} from '../../tiptap-ui-primitive/popover'
+import { Separator } from '../../tiptap-ui-primitive/separator'
 import {
   Card,
   CardBody,
   CardItemGroup,
-} from "@/components/tiptap-ui-primitive/card"
-import { Input } from "@/components/tiptap-ui-primitive/input"
-import { ButtonGroup } from "@/components/tiptap-ui-primitive/button-group"
+} from '../../tiptap-ui-primitive/card'
+import { Input } from '../../tiptap-ui-primitive/input'
+import { ButtonGroup } from '../../tiptap-ui-primitive/button-group'
 
 import "./link-popover.scss"
 

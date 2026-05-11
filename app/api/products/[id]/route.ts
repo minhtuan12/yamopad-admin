@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { apiError } from "@/lib/api-response";
-import { connectMongo } from "@/lib/mongodb";
-import { validateProductPayload } from "@/lib/validators/catalog";
-import ProductModel from "@/models/product";
-import CategoryModel from "@/models/category";
+import { apiError } from "../../../../lib/api-response";
+import { connectMongo } from "../../../../lib/mongodb";
+import { validateProductPayload } from "../../../../lib/validators/catalog";
+import ProductModel from "../../../../models/product";
+import CategoryModel from "../../../../models/category";
 
 type RouteContext = {
   params: Promise<{ id: string }>;

@@ -2,9 +2,8 @@
 
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { Collapse, Form, Input, InputNumber, Modal, Select, Switch, Tabs } from "antd";
-import { productInitialValues } from "@/lib/catalog-form-defaults";
-import { createSlugFromViTitle } from "@/lib/slug";
-import type { Category, ProductPayload } from "@/types/catalog";
+import { productInitialValues } from "../../lib/catalog-form-defaults";
+import type { Category, ProductPayload } from "../../types/catalog";
 import { ImageUploadField } from "./image-upload-field";
 import { LocalizedFields } from "./localized-fields";
 import { LocalizedRichEditFields, RichEdit } from "./rich-edit";

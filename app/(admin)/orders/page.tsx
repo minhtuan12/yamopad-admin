@@ -1,8 +1,6 @@
 "use client";
 
 import { Alert } from "antd";
-import { AdminPanel } from "@/components/admin/admin-panel";
-import { PageHeading } from "@/components/admin/page-heading";
 
 export default function OrdersPage() {
   // return (

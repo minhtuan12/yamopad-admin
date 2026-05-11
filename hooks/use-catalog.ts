@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { Category, Product } from "@/types/catalog";
+import type { Category, Product } from '../types/catalog';
 
 export function useCatalog() {
   const [categories, setCategories] = useState<Category[]>([]);

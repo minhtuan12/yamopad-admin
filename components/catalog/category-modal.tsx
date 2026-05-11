@@ -1,8 +1,8 @@
 "use client";
 
 import { Form, Modal, Select } from "antd";
-import { categoryInitialValues } from "@/lib/catalog-form-defaults";
-import type { Category, CategoryPayload } from "@/types/catalog";
+import { categoryInitialValues } from "../../lib/catalog-form-defaults";
+import type { Category, CategoryPayload } from "../../types/catalog";
 import { ImageUploadField } from "./image-upload-field";
 import { LocalizedFields } from "./localized-fields";
 

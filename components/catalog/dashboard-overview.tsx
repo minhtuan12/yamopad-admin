@@ -5,11 +5,11 @@ import { Button, Image, Space, Spin, Statistic, Table, Tag, Typography } from "a
 import type { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import { useMemo } from "react";
-import { AdminPanel } from "@/components/admin/admin-panel";
-import { useAdminSearch } from "@/components/admin/admin-context";
-import { PageHeading } from "@/components/admin/page-heading";
-import { useCatalog } from "@/hooks/use-catalog";
-import type { Product } from "@/types/catalog";
+import { AdminPanel } from "../../components/admin/admin-panel";
+import { useAdminSearch } from "../../components/admin/admin-context";
+import { PageHeading } from "../../components/admin/page-heading";
+import { useCatalog } from "../../hooks/use-catalog";
+import type { Product } from "../../types/catalog";
 import { ApiWarning } from "./api-warning";
 
 const { Text } = Typography;

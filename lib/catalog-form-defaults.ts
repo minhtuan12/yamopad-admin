@@ -1,4 +1,4 @@
-import type { CategoryPayload, ProductPayload } from "@/types/catalog";
+import type { CategoryPayload, ProductPayload } from '../types/catalog';
 
 export const emptyLocalized = { en: "", vi: "" };
 

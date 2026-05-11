@@ -4,12 +4,12 @@ import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Image, Popconfirm, Space, Spin, Switch, Table, Tag, Typography, message } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useMemo, useState } from "react";
-import { AdminPanel } from "@/components/admin/admin-panel";
-import { useAdminSearch } from "@/components/admin/admin-context";
-import { PageHeading } from "@/components/admin/page-heading";
-import { productInitialValues } from "@/lib/catalog-form-defaults";
-import type { Product, ProductPayload } from "@/types/catalog";
-import { useCatalog } from "@/hooks/use-catalog";
+import { AdminPanel } from "../../components/admin/admin-panel";
+import { useAdminSearch } from "../../components/admin/admin-context";
+import { PageHeading } from "../../components/admin/page-heading";
+import { productInitialValues } from "../../lib/catalog-form-defaults";
+import type { Product, ProductPayload } from "../../types/catalog";
+import { useCatalog } from "../../hooks/use-catalog";
 import { ApiWarning } from "./api-warning";
 import { ProductModal } from "./product-modal";
 
