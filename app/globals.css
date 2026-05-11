@@ -1,0 +1,72 @@
+@import "../styles/_variables.scss";
+@import "../styles/_keyframe-animations.scss";
+
+@import "tailwindcss";
+
+:root {
+    --background: #f5f5f8;
+    --foreground: #171720;
+    --muted: #74788d;
+    --brand: #6b46ff;
+    --brand-soft: #efeaff;
+    --line: #e6e7ee;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.ant-layout,
+.ant-layout-sider,
+.ant-menu {
+    font-family: inherit;
+}
+
+.admin-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 10px 28px rgba(20, 20, 43, 0.06);
+}
+
+.section-title-mark {
+    width: 8px;
+    height: 26px;
+    border-radius: 2px;
+    background: #ffb58f;
+}
+
+.metric-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #ffffff;
+    padding: 18px;
+}
+
+@media (max-width: 768px) {
+    .ant-table {
+        font-size: 12px;
+    }
+}
+
+input {
+    min-height: 40px;
+}
+
+.no-padding-collapse {
+    .ant-collapse-content-box {
+        padding: 0 !important;
+    }
+}
