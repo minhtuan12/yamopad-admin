@@ -95,7 +95,7 @@ export function ProductManagement() {
       render: (_, record) => (
         <Space>
           <Button icon={<EditOutlined />} onClick={() => openEdit(record)} />
-          <Popconfirm title="Delete product?" onConfirm={() => deleteProduct(record._id)}>
+          <Popconfirm title="Xóa sản phẩm này?" okText="Xóa" cancelText="Hủy" onConfirm={() => deleteProduct(record._id)}>
             <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>

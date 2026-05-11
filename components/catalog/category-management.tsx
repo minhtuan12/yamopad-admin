@@ -34,7 +34,7 @@ export function CategoryManagement() {
 
   const columns: ColumnsType<Category> = [
     {
-      title: "Category",
+      title: "Tên danh mục",
       dataIndex: "title",
       render: (_, record) => (
         <Space>
@@ -48,23 +48,17 @@ export function CategoryManagement() {
     },
     { title: "Slug", dataIndex: "slug", responsive: ["md"] },
     {
-      title: "Parent",
-      dataIndex: "parentId",
-      responsive: ["lg"],
-      render: (value) => value || <Text type="secondary">Root</Text>
-    },
-    {
-      title: "Products",
+      title: "Số lượng sản phẩm",
       dataIndex: "slug",
       render: (slug) => <Tag color="blue">{productCountByCategory[slug] || 0}</Tag>
     },
     {
-      title: "Actions",
+      title: "Hành động",
       width: 130,
       render: (_, record) => (
         <Space>
           <Button icon={<EditOutlined />} onClick={() => openEdit(record)} />
-          <Popconfirm title="Delete category?" onConfirm={() => deleteCategory(record._id)}>
+          <Popconfirm okText="Xóa" cancelText="Hủy" title="Xóa danh mục này?" onConfirm={() => deleteCategory(record._id)}>
             <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
