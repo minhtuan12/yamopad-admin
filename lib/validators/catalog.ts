@@ -88,12 +88,14 @@ export function validateCategoryPayload(input: unknown): ValidationResult<Catego
 export function validateProductPayload(input: unknown): ValidationResult<ProductPayload> {
   const record = asRecord(input);
   const priceUsd = Number(record.priceUsd);
+  const stock = Number(record.stock);
   const salePercent = Number(record.salePercent ?? 0);
   const data: ProductPayload = {
     title: cleanLocalized(record.title),
     description: cleanLocalized(record.description),
     categorySlug: cleanText(record.categorySlug),
     priceUsd,
+    stock,
     images: cleanStringArray(record.images),
     colors: cleanStringArray(record.colors),
     properties: cleanProperties(record.properties),
@@ -104,12 +106,12 @@ export function validateProductPayload(input: unknown): ValidationResult<Product
   const materialsAndCare = cleanOptionalLocalized(record.materialsAndCare);
   const shipping = cleanOptionalLocalized(record.shipping);
   const returns = cleanOptionalLocalized(record.returns);
-  const giftPackaging = cleanText(record.giftPackaging);
+  const giftPackaging = cleanOptionalLocalized(record.giftPackaging);
   if (details) data.details = details;
   if (materialsAndCare) data.materialsAndCare = materialsAndCare;
   if (shipping) data.shipping = shipping;
   if (returns) data.returns = returns;
-  if (!isEmptyHtml(giftPackaging)) data.giftPackaging = giftPackaging;
+  if (giftPackaging) data.giftPackaging = giftPackaging;
   data.slug = createSlugFromViTitle(data.title.vi);
   const errors: FieldErrors = {};
 
@@ -118,6 +120,7 @@ export function validateProductPayload(input: unknown): ValidationResult<Product
   if (!data.slug && data.title.vi) errors.slug = "Vietnamese title must contain letters or numbers";
   if (!data.categorySlug) errors.categorySlug = "Category is required";
   if (!Number.isFinite(data.priceUsd) || data.priceUsd < 0) errors.priceUsd = "Price must be a positive number";
+  if (!Number.isFinite(data.stock) || data.stock < 0) errors.stock = "Stock must be a positive number";
   if (!data.images.length) errors.images = "At least one image is required";
   data.properties.forEach((property, index) => {
     if (!property.name) errors[`properties.${index}.name`] = "Property name is required";

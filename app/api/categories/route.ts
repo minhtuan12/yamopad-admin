@@ -13,7 +13,7 @@ type CategoryLean = {
 export async function GET() {
   try {
     await connectMongo();
-    const categories = await CategoryModel.find().sort({ createdAt: -1 }).lean();
+    const categories = await CategoryModel.find({ isDeleted: { $ne: true } }).sort({ createdAt: -1 }).lean();
     return NextResponse.json({ categories });
   } catch (error) {
     return apiError(error);
@@ -29,7 +29,10 @@ export async function POST(request: Request) {
 
     await connectMongo();
     if (validation.data.parentId) {
-      const parent = await CategoryModel.findOne({ slug: validation.data.parentId }).lean<CategoryLean>();
+      const parent = await CategoryModel.findOne({
+        slug: validation.data.parentId,
+        isDeleted: { $ne: true }
+      }).lean<CategoryLean>();
       if (!parent) return NextResponse.json({ error: "Parent category not found" }, { status: 422 });
       if (parent.parentId) return NextResponse.json({ error: "Only two category levels are allowed" }, { status: 422 });
     }

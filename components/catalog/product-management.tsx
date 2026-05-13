@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Image, Popconfirm, Space, Spin, Switch, Table, Tag, Typography, message } from "antd";
+import { Button, Form, Image, notification, Popconfirm, Space, Spin, Switch, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useMemo, useState } from "react";
 import { AdminPanel } from "../../components/admin/admin-panel";
@@ -14,10 +14,12 @@ import { ApiWarning } from "./api-warning";
 import { ProductModal } from "./product-modal";
 
 const { Text } = Typography;
+const notificationPlacement = "topRight" as const;
 
 export function ProductManagement() {
   const { query } = useAdminSearch();
   const { categories, products, loading, apiWarning, reload } = useCatalog();
+  const [notificationApi, notificationContextHolder] = notification.useNotification();
   const [modalOpen, setModalOpen] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -72,6 +74,8 @@ export function ProductManagement() {
     {
       title: "Giá",
       dataIndex: "priceUsd",
+      align: 'right',
+      width: 100,
       render: (price, record) => (
         <Space direction="vertical" size={0}>
           <Text>${price.toLocaleString()}</Text>
@@ -81,6 +85,8 @@ export function ProductManagement() {
     },
     {
       title: "Sản phẩm mới",
+      align: 'center',
+      width: 150,
       render: (_, record) => (
         <Switch
           checked={record.isNew}
@@ -125,13 +131,21 @@ export function ProductManagement() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values)
       });
-      const json = await response.json();
-      if (!response.ok) throw new Error(json.error || "Product save failed");
-      message.success(mode === "edit" ? "Product updated" : "Product created");
+      await response.json();
+      if (!response.ok) throw new Error("PRODUCT_SAVE_FAILED");
+      notificationApi.success({
+        message: mode === "edit" ? "Đã cập nhật sản phẩm" : "Đã tạo sản phẩm",
+        description: mode === "edit" ? "Thông tin sản phẩm đã được lưu thành công." : "Sản phẩm mới đã được thêm vào hệ thống.",
+        placement: notificationPlacement
+      });
       setModalOpen(false);
       await reload();
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Product save failed");
+    } catch {
+      notificationApi.error({
+        message: mode === "edit" ? "Không thể cập nhật sản phẩm" : "Không thể tạo sản phẩm",
+        description: "Vui lòng kiểm tra lại thông tin và thử lại.",
+        placement: notificationPlacement
+      });
     } finally {
       setSaving(false);
     }
@@ -143,14 +157,22 @@ export function ProductManagement() {
       const response = await fetch(`/api/products/${product._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...product, isNew })
+        body: JSON.stringify({ ...product, stock: product.stock ?? 0, isNew })
       });
-      const json = await response.json();
-      if (!response.ok) throw new Error(json.error || "Product update failed");
-      message.success("Cập nhật sản phẩm mới thành công");
+      await response.json();
+      if (!response.ok) throw new Error("PRODUCT_UPDATE_FAILED");
+      notificationApi.success({
+        message: "Đã cập nhật trạng thái sản phẩm",
+        description: isNew ? "Sản phẩm đã được đánh dấu là sản phẩm mới." : "Sản phẩm đã được bỏ đánh dấu sản phẩm mới.",
+        placement: notificationPlacement
+      });
       await reload();
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Product update failed");
+    } catch {
+      notificationApi.error({
+        message: "Không thể cập nhật trạng thái sản phẩm",
+        description: "Vui lòng thử lại sau.",
+        placement: notificationPlacement
+      });
     } finally {
       setUpdatingNewId(null);
     }
@@ -159,15 +181,24 @@ export function ProductManagement() {
   async function deleteProduct(id: string) {
     const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
     if (!response.ok) {
-      message.error("Product delete failed");
+      notificationApi.error({
+        message: "Không thể xóa sản phẩm",
+        description: "Vui lòng thử lại sau.",
+        placement: notificationPlacement
+      });
       return;
     }
-    message.success("Product deleted");
+    notificationApi.success({
+      message: "Đã xóa sản phẩm",
+      description: "Sản phẩm đã được xóa khỏi danh sách quản lý.",
+      placement: notificationPlacement
+    });
     await reload();
   }
 
   return (
     <>
+      {notificationContextHolder}
       <PageHeading title="Quản lý sản phẩm" />
       <ApiWarning message={apiWarning} />
       <Spin spinning={loading}>

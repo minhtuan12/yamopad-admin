@@ -17,10 +17,13 @@ export async function PUT(request: Request, context: RouteContext) {
     }
 
     await connectMongo();
-    const category = await CategoryModel.findOne({ slug: validation.data.categorySlug }).lean();
+    const category = await CategoryModel.findOne({
+      slug: validation.data.categorySlug,
+      isDeleted: { $ne: true }
+    }).lean();
     if (!category) return NextResponse.json({ error: "Category not found" }, { status: 422 });
     const { id } = await context.params;
-    const product = await ProductModel.findByIdAndUpdate(id, validation.data, {
+    const product = await ProductModel.findOneAndUpdate({ _id: id, isDeleted: { $ne: true } }, validation.data, {
       new: true,
       runValidators: true
     });
@@ -35,7 +38,11 @@ export async function DELETE(_request: Request, context: RouteContext) {
   try {
     await connectMongo();
     const { id } = await context.params;
-    const product = await ProductModel.findByIdAndDelete(id);
+    const product = await ProductModel.findOneAndUpdate(
+      { _id: id, isDeleted: { $ne: true } },
+      { isDeleted: true, deletedAt: new Date() },
+      { new: true }
+    );
     if (!product) return NextResponse.json({ error: "Product not found" }, { status: 404 });
     return NextResponse.json({ ok: true });
   } catch (error) {

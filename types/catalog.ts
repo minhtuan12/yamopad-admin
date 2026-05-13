@@ -17,6 +17,8 @@ export type Category = {
   description: LocalizedText;
   coverImage: string;
   banner: string;
+  isDeleted?: boolean;
+  deletedAt?: string;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -28,6 +30,7 @@ export type Product = {
   description: LocalizedText;
   categorySlug: string;
   priceUsd: number;
+  stock: number;
   images: string[];
   colors: string[];
   properties: ProductProperty[];
@@ -35,9 +38,11 @@ export type Product = {
   materialsAndCare?: LocalizedText;
   shipping?: LocalizedText;
   returns?: LocalizedText;
-  giftPackaging?: string;
+  giftPackaging?: LocalizedText;
   isNew: boolean;
   salePercent: number;
+  isDeleted?: boolean;
+  deletedAt?: string;
   createdAt?: string;
   updatedAt?: string;
 };

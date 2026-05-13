@@ -17,6 +17,7 @@ const productSchema = new Schema(
     description: { type: localizedTextSchema, required: true },
     categorySlug: { type: String, required: true, index: true, trim: true },
     priceUsd: { type: Number, required: true, min: 0 },
+    stock: { type: Number, required: true, min: 0 },
     images: [{ type: String, required: true, trim: true }],
     colors: [{ type: String }],
     properties: { type: [productPropertySchema], default: [] },
@@ -24,9 +25,11 @@ const productSchema = new Schema(
     materialsAndCare: { type: localizedTextSchema },
     shipping: { type: localizedTextSchema },
     returns: { type: localizedTextSchema },
-    giftPackaging: { type: String },
+    giftPackaging: { type: localizedTextSchema },
     isNew: { type: Boolean, default: false },
-    salePercent: { type: Number, default: 0, min: 0 }
+    salePercent: { type: Number, default: 0, min: 0 },
+    isDeleted: { type: Boolean, default: false, index: true },
+    deletedAt: { type: Date, default: null }
   },
   {
     timestamps: true,

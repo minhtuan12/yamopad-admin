@@ -15,6 +15,7 @@ export const productInitialValues: ProductPayload = {
   description: emptyLocalized,
   categorySlug: "",
   priceUsd: 0,
+  stock: 0,
   images: [],
   colors: [],
   properties: [],
@@ -22,7 +23,7 @@ export const productInitialValues: ProductPayload = {
   materialsAndCare: emptyLocalized,
   shipping: emptyLocalized,
   returns: emptyLocalized,
-  giftPackaging: "",
+  giftPackaging: emptyLocalized,
   isNew: false,
   salePercent: 0
 };

@@ -1,7 +1,7 @@
 "use client";
 
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Image, Popconfirm, Space, Spin, Table, Tag, Typography, message } from "antd";
+import { Button, Form, Image, notification, Popconfirm, Space, Spin, Table, Tag, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useMemo, useState } from "react";
 import { AdminPanel } from "../../components/admin/admin-panel";
@@ -14,10 +14,12 @@ import { ApiWarning } from "./api-warning";
 import { CategoryModal } from "./category-modal";
 
 const { Text } = Typography;
+const notificationPlacement = "topRight" as const;
 
 export function CategoryManagement() {
   const { query } = useAdminSearch();
   const { categories, loading, apiWarning, productCountByCategory, reload } = useCatalog();
+  const [notificationApi, notificationContextHolder] = notification.useNotification();
   const [modalOpen, setModalOpen] = useState(false);
   const [mode, setMode] = useState<"create" | "edit">("create");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -88,13 +90,21 @@ export function CategoryManagement() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values)
       });
-      const json = await response.json();
-      if (!response.ok) throw new Error(json.error || "Category save failed");
-      message.success(mode === "edit" ? "Category updated" : "Category created");
+      await response.json();
+      if (!response.ok) throw new Error("CATEGORY_SAVE_FAILED");
+      notificationApi.success({
+        message: mode === "edit" ? "Đã cập nhật danh mục" : "Đã tạo danh mục",
+        description: mode === "edit" ? "Thông tin danh mục đã được lưu thành công." : "Danh mục mới đã được thêm vào hệ thống.",
+        placement: notificationPlacement
+      });
       setModalOpen(false);
       await reload();
-    } catch (error) {
-      message.error(error instanceof Error ? error.message : "Category save failed");
+    } catch {
+      notificationApi.error({
+        message: mode === "edit" ? "Không thể cập nhật danh mục" : "Không thể tạo danh mục",
+        description: "Vui lòng kiểm tra lại thông tin và thử lại.",
+        placement: notificationPlacement
+      });
     } finally {
       setSaving(false);
     }
@@ -103,15 +113,24 @@ export function CategoryManagement() {
   async function deleteCategory(id: string) {
     const response = await fetch(`/api/categories/${id}`, { method: "DELETE" });
     if (!response.ok) {
-      message.error("Category delete failed");
+      notificationApi.error({
+        message: "Không thể xóa danh mục",
+        description: "Vui lòng thử lại sau.",
+        placement: notificationPlacement
+      });
       return;
     }
-    message.success("Category deleted");
+    notificationApi.success({
+      message: "Đã xóa danh mục",
+      description: "Danh mục đã được xóa khỏi danh sách quản lý.",
+      placement: notificationPlacement
+    });
     await reload();
   }
 
   return (
     <>
+      {notificationContextHolder}
       <PageHeading title="Quản lý danh mục" />
       <ApiWarning message={apiWarning} />
       <Spin spinning={loading}>

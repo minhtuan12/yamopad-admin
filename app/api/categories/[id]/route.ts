@@ -23,26 +23,35 @@ export async function PUT(request: Request, context: RouteContext) {
 
     await connectMongo();
     const { id } = await context.params;
-    const currentCategory = await CategoryModel.findById(id).lean<CategoryLean>();
+    const currentCategory = await CategoryModel.findOne({ _id: id, isDeleted: { $ne: true } }).lean<CategoryLean>();
     if (!currentCategory) return NextResponse.json({ error: "Category not found" }, { status: 404 });
 
     if (validation.data.parentId) {
-      const parent = await CategoryModel.findOne({ slug: validation.data.parentId }).lean<CategoryLean>();
+      const parent = await CategoryModel.findOne({
+        slug: validation.data.parentId,
+        isDeleted: { $ne: true }
+      }).lean<CategoryLean>();
       if (!parent) return NextResponse.json({ error: "Parent category not found" }, { status: 422 });
       if (String(parent._id) === id) return NextResponse.json({ error: "Category cannot be its own parent" }, { status: 422 });
       if (parent.parentId) return NextResponse.json({ error: "Only two category levels are allowed" }, { status: 422 });
-      const hasChildren = await CategoryModel.exists({ parentId: currentCategory.slug });
+      const hasChildren = await CategoryModel.exists({
+        parentId: currentCategory.slug,
+        isDeleted: { $ne: true }
+      });
       if (hasChildren) {
         return NextResponse.json({ error: "A parent category with children cannot become a child category" }, { status: 422 });
       }
     }
-    const category = await CategoryModel.findByIdAndUpdate(id, validation.data, {
+    const category = await CategoryModel.findOneAndUpdate({ _id: id, isDeleted: { $ne: true } }, validation.data, {
       new: true,
       runValidators: true
     });
     if (!category) return NextResponse.json({ error: "Category not found" }, { status: 404 });
     if (currentCategory.slug !== category.slug) {
-      await CategoryModel.updateMany({ parentId: currentCategory.slug }, { parentId: category.slug });
+      await CategoryModel.updateMany(
+        { parentId: currentCategory.slug, isDeleted: { $ne: true } },
+        { parentId: category.slug }
+      );
     }
     return NextResponse.json({ category });
   } catch (error) {
@@ -54,8 +63,16 @@ export async function DELETE(_request: Request, context: RouteContext) {
   try {
     await connectMongo();
     const { id } = await context.params;
-    const category = await CategoryModel.findByIdAndDelete(id);
+    const category = await CategoryModel.findOneAndUpdate(
+      { _id: id, isDeleted: { $ne: true } },
+      { isDeleted: true, deletedAt: new Date() },
+      { new: true }
+    );
     if (!category) return NextResponse.json({ error: "Category not found" }, { status: 404 });
+    await CategoryModel.updateMany(
+      { parentId: category.slug, isDeleted: { $ne: true } },
+      { isDeleted: true, deletedAt: new Date() }
+    );
     return NextResponse.json({ ok: true });
   } catch (error) {
     return apiError(error);

@@ -8,7 +8,9 @@ const categorySchema = new Schema(
     title: { type: localizedTextSchema, required: true },
     description: { type: localizedTextSchema, required: true },
     coverImage: { type: String, required: true, trim: true },
-    banner: { type: String, required: true, trim: true }
+    banner: { type: String, required: true, trim: true },
+    isDeleted: { type: Boolean, default: false, index: true },
+    deletedAt: { type: Date, default: null }
   },
   {
     timestamps: true,

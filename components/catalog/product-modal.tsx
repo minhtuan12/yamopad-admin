@@ -1,12 +1,12 @@
 "use client";
 
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
-import { Collapse, Form, Input, InputNumber, Modal, Select, Switch, Tabs } from "antd";
+import { Form, Input, InputNumber, Modal, Select, Switch, Tabs } from "antd";
 import { productInitialValues } from "../../lib/catalog-form-defaults";
 import type { Category, ProductPayload } from "../../types/catalog";
 import { ImageUploadField } from "./image-upload-field";
 import { LocalizedFields } from "./localized-fields";
-import { LocalizedRichEditFields, RichEdit } from "./rich-edit";
+import { LocalizedRichEditFields } from "./rich-edit";
 
 export function ProductModal({
   categories,
@@ -25,7 +25,6 @@ export function ProductModal({
   onCancel: () => void;
   onSubmit: (values: ProductPayload) => void;
 }) {
-  const viTitle = Form.useWatch(["title", "vi"], form);
   const rootCategories = categories.filter((category) => !category.parentId);
   const categoryOptions = rootCategories.map((parent) => {
     const children = categories.filter((category) => category.parentId === parent.slug);
@@ -49,6 +48,12 @@ export function ProductModal({
       onOk={() => form.submit()}
       okText={mode === "edit" ? "Lưu" : "Tạo"}
       cancelText="Đóng"
+      okButtonProps={{
+        size: 'large',
+      }}
+      cancelButtonProps={{
+        size: 'large',
+      }}
       confirmLoading={saving}
       width={1100}
       style={{ top: 24 }}
@@ -75,9 +80,12 @@ export function ProductModal({
                   </div>
                   <LocalizedFields prefix="title" label="Tên sản phẩm" />
                   <LocalizedFields prefix="description" label="Mô tả sản phẩm" textarea />
-                  <div className="grid gap-3 md:grid-cols-3">
+                  <div className="grid gap-3 md:grid-cols-4">
                     <Form.Item name="priceUsd" label="Giá (USD)" rules={[{ required: true }]}>
                       <InputNumber min={0} className="w-full" prefix="$" />
+                    </Form.Item>
+                    <Form.Item name="stock" label="Tồn kho" rules={[{ required: true }]}>
+                      <InputNumber min={0} precision={0} className="w-full" />
                     </Form.Item>
                     <Form.Item name="salePercent" label="Giảm giá (%)">
                       <InputNumber min={0} max={100} className="w-full" suffix="%" />
@@ -92,6 +100,7 @@ export function ProductModal({
             {
               key: "media",
               label: "Hình ảnh & Các thuộc tính",
+              forceRender: true,
               children: (
                 <>
                   <Form.Item name="images" label="Hình ảnh" rules={[{ required: true }]}>
@@ -113,20 +122,7 @@ export function ProductModal({
                   <LocalizedRichEditFields prefix="materialsAndCare" label="Chất liệu và cách bảo quản" optional />
                   <LocalizedRichEditFields prefix="shipping" label="Vận chuyển" optional />
                   <LocalizedRichEditFields prefix="returns" label="Hoàn trả hàng" optional />
-                  <Collapse
-                    destroyOnHidden
-                    items={[
-                      {
-                        key: "giftPackaging",
-                        label: "Đóng gói",
-                        children: (
-                          <Form.Item name="giftPackaging">
-                            <RichEdit placeholder="Nhập thông tin đóng gói" />
-                          </Form.Item>
-                        )
-                      }
-                    ]}
-                  />
+                  <LocalizedRichEditFields prefix="giftPackaging" label="Đóng gói" optional />
                 </>
               )
             }

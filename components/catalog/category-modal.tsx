@@ -38,6 +38,12 @@ export function CategoryModal({
       cancelText="Đóng"
       confirmLoading={saving}
       width={760}
+      okButtonProps={{
+        size: 'large',
+      }}
+      cancelButtonProps={{
+        size: 'large',
+      }}
     >
       <Form layout="vertical" form={form} onFinish={onSubmit} initialValues={categoryInitialValues}>
         <Form.Item name="parentId" label="Danh mục cha">
