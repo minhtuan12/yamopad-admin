@@ -81,8 +81,8 @@ export function ProductModal({
                   <LocalizedFields prefix="title" label="Tên sản phẩm" />
                   <LocalizedFields prefix="description" label="Mô tả sản phẩm" textarea />
                   <div className="grid gap-3 md:grid-cols-4">
-                    <Form.Item name="priceUsd" label="Giá (USD)" rules={[{ required: true }]}>
-                      <InputNumber min={0} className="w-full" prefix="$" />
+                    <Form.Item name="priceUsd" label="Giá (VND)" rules={[{ required: true }]}>
+                      <InputNumber min={0} className="w-full" prefix="đ" />
                     </Form.Item>
                     <Form.Item name="stock" label="Tồn kho" rules={[{ required: true }]}>
                       <InputNumber min={0} precision={0} className="w-full" />

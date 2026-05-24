@@ -78,7 +78,7 @@ export function ProductManagement() {
       width: 100,
       render: (price, record) => (
         <Space direction="vertical" size={0}>
-          <Text>${price.toLocaleString()}</Text>
+          <Text>{price.toLocaleString()}đ</Text>
           {record.salePercent > 0 && <Tag color="red">-{record.salePercent}%</Tag>}
         </Space>
       )
